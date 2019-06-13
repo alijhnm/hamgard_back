@@ -1,13 +1,11 @@
-import json
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
-from account.models import User
-from .utils import get_user
+from ..get_user import get_user
 
 
-@get_user
 @csrf_exempt
+@get_user
 @require_http_methods(['POST'])
 def log_out(request, user):
     """
