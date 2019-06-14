@@ -1,7 +1,7 @@
 from django.urls import path
-from .login.customer import log_in as customer_login
-from .logout.customer import log_out as customer_logout
-from .signup.customer import sign_up as customer_signup
+from .customer_login import log_in as customer_login
+from .customer_logout import log_out as customer_logout
+from .customer_signup import sign_up as customer_signup
 
 
 urlpatterns = [
