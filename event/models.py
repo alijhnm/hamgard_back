@@ -9,6 +9,7 @@ class EventCategory(models.Model):
 
 
 class Event(models.Model):
+    vendor = models.ForeignKey("account.Vendor", on_delete=models.CASCADE)
     title = models.CharField(max_length=500)
     address = models.ForeignKey("Address", on_delete=models.CASCADE, blank=True)
     category = models.ForeignKey(EventCategory, on_delete=models.CASCADE)
@@ -59,8 +60,8 @@ class City(models.Model):
 
 
 class Address(models.Model):
-    lat = models.FloatField()
-    lng = models.FloatField()
+    lat = models.FloatField(blank=True, null=True)
+    lng = models.FloatField(blank=True, null=True)
     address_text = models.CharField(max_length=500, null=True, blank=True)
 
     def __str__(self):
