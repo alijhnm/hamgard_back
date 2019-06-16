@@ -17,7 +17,7 @@ class Vendor(models.Model):
     reason = models.TextField(null=True, blank=True)
 
     def __str__(self):
-        return self.pk
+        return self.user.username
 
 
 class User(AbstractUser):

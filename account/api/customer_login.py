@@ -1,4 +1,7 @@
 import json
+
+from django.contrib.auth import authenticate
+from django.contrib.auth.hashers import make_password
 from account.models import User
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -22,11 +25,12 @@ def log_in(request):
 
     if username is None or password is None or remember_me is None:
         return JsonResponse({"message": "invalid params give"}, status=400)
-    # user = authenticate(username=username, password=password)
+    # user = authenticate(username=username, password=make_password(password))
+    print(username, password)
     user = User.objects.filter(username=username, password=password).first()
+    print(user)
     if not user:
         return JsonResponse({"message": "incorrect username or password"}, status=404)
-
     if not remember_me:
         p = False
     else:
