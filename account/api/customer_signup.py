@@ -36,7 +36,7 @@ def sign_up(request):
                 password=password,
                 mobile_number=phone_number,
                 first_name=first_name,
-                last_name =last_name
+                last_name=last_name
                 )
     try:
         user.save()
