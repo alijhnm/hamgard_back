@@ -16,18 +16,19 @@ def group_list(request, user):
     return JsonResponse({"user_groups": serialize_group_queryset(groups)})
 
 
-@get_user
 @csrf_exempt
+@get_user
 @require_http_methods(["GET"])
 def group_detail(request, user):
     data = json.loads(request.body)
     group_id = data.get("group_id")
     group = Group.objects.filter(id=group_id).first()
-    if user not in group.members.all() and group.creator.username != user.username:
-        return JsonResponse({"message": "user not in requested group."}, status=401)
 
     if group is None:
         return JsonResponse({"message": "Group not found."}, status=400)
+
+    if user not in group.members.all() and group.creator.username != user.username:
+        return JsonResponse({"message": "user not in requested group."}, status=401)
 
     return JsonResponse({"name": group.name,
                          "created": group.created,
