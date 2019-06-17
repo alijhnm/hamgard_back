@@ -1,4 +1,5 @@
 import json
+import threading
 from account.models import Group, User
 from account.api import get_user, send_invitation
 from django.http import JsonResponse
@@ -21,7 +22,17 @@ def create_group(request, creator):
     for user in members:
         unregistered_members.remove(user.email)
 
-    send_invitation.send_invitation_to_nonusers(creator.username, name, members, unregistered_members)
+    invitation_thread = threading.Thread(target=send_invitation.send_invitation_to_nonusers,
+                                         args=[creator.username,
+                                               name,
+                                               [member.username for member in members],
+                                               unregistered_members])
+    invitation_thread.start()
+    # send_invitation.send_invitation_to_nonusers(creator.username,
+    #                                             name,
+    #                                             [member.username for member in members],
+    #                                             unregistered_members)
+
     group_id = create_group_in_db(creator, name, group_type, members)
 
     return JsonResponse({"status": "Successfully created group.",
