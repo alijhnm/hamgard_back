@@ -1,9 +1,11 @@
 import json
 from django.http.response import JsonResponse
+from django.contrib.auth.hashers import make_password
 from django.db.utils import IntegrityError
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 from account.models import User
+from Hamgard.settings import SALT
 
 
 @csrf_exempt
@@ -33,7 +35,7 @@ def sign_up(request):
     user = User(
                 email=email,
                 username=username,
-                password=password,
+                password=make_password(password, salt=SALT),
                 mobile_number=phone_number,
                 first_name=first_name,
                 last_name=last_name

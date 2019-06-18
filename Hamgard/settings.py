@@ -27,6 +27,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = [] + ALLOWED_HOSTS_LOCAL
 
+# define salt for password hashing
+SALT = "Tahlil9798"
 
 # Application definition
 
