@@ -80,6 +80,7 @@ class Group(models.Model):
     members = models.ManyToManyField(User, blank=True)
     type = models.CharField(max_length=200, null=True, blank=True)
     name = models.CharField(null=True, blank=True, max_length=200)
+    polls = models.ManyToManyField('poll.Poll', blank=True)
 
 
 class SuperGroup(models.Model):
