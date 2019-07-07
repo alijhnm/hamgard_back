@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'account',
     'group',
     'event',
-    "poll"
+    "poll",
+    "place"
 ]
 
 MIDDLEWARE = [
