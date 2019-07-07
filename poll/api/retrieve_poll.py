@@ -41,9 +41,14 @@ def serialize_polls(polls_queryset):
     result = list()
     for poll in polls_queryset:
         poll_dict = dict()
+<<<<<<< HEAD
         poll_dict["id"] = poll.pk
         poll_dict["question"] = poll.question
         choices = [{"id": ch.id, "text": ch.text, "vote_count": ch.choice_count} for ch in poll.choices.all()]
         poll_dict["choices"] = choices
+=======
+        poll_dict["question"] = poll.question
+        poll_dict["choices"] = [(ch.text, ch.choice_count) for ch in poll.choices.all()]
+>>>>>>> Add retrieve_poll api.
         result.append(poll_dict)
     return result
