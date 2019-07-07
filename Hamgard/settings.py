@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'account',
     'group',
-    'event'
+    'event',
+    "poll"
 ]
 
 MIDDLEWARE = [
