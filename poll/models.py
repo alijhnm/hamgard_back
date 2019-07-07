@@ -5,7 +5,7 @@ class Poll(models.Model):
     question = models.CharField(max_length=255)
 
     def __str__(self):
-        return self.questions
+        return self.question
 
 
 class PollChoice(models.Model):
