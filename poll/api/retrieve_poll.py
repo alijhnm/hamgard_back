@@ -45,5 +45,6 @@ def serialize_polls(polls_queryset):
         poll_dict["question"] = poll.question
         choices = [{"id": ch.id, "text": ch.text, "vote_count": ch.choice_count} for ch in poll.choices.all()]
         poll_dict["choices"] = choices
-        
+        result.append(poll_dict)
+
     return result
