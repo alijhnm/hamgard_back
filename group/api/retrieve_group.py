@@ -18,7 +18,7 @@ def group_list(request, user):
 
 @csrf_exempt
 @get_user
-@require_http_methods(["GET"])
+@require_http_methods(["GET", "POST"])
 def group_detail(request, user):
     data = json.loads(request.body)
     group_id = data.get("group_id")
@@ -31,8 +31,10 @@ def group_detail(request, user):
         return JsonResponse({"message": "user not in requested group."}, status=401)
 
     return JsonResponse({"name": group.name,
+                         "id": group.pk,
                          "created": group.created,
                          "type": group.type,
+                         "is_creator": group.creator.username == user,
                          "creator": group.creator.username,
                          "members": [member.username for member in group.members.all()]}, status=200)
 
@@ -42,6 +44,7 @@ def serialize_group_queryset(queryset):
     for group in queryset:
         serialized = dict()
         serialized["name"] = group.name
+        serialized["id"] = group.pk,
         serialized["creator"] = group.creator.username
         serialized["created"] = group.created
         serialized["type"] = group.type
