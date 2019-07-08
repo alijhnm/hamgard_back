@@ -23,7 +23,7 @@ def log_in(request):
 
     if username is None or password is None or remember_me is None:
         return JsonResponse({"message": "invalid params give"}, status=400)
-    user = authenticate(username=username, password=make_password(password, salt=SALT))
+    user = authenticate(username=username, password=password, salt=SALT)
     if not user:
         return JsonResponse({"message": "incorrect username or password"}, status=404)
     if not remember_me:
