@@ -4,6 +4,6 @@ from django.urls import path
 
 urlpatterns = [
     path('retrievepolls/', get_group_polls),
-    path('createeventpoll/', create_poll),
+    path('createpoll/', create_poll),
     path('retrievepoll/', get_poll)
 ]
