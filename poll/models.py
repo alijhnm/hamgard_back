@@ -8,13 +8,30 @@ class Poll(models.Model):
 
     def __str__(self):
         return self.question
+    
+    def is_voted_user(self, user):
+        if any(a.is_voted_user(user) for a in self.choices.all()):
+            return True
+        return False
+
 
 class PollChoice(models.Model):
-    poll = models.ForeignKey(Poll, on_delete=models.CASCADE, related_name="event_choices")
+    # dictionary = dict(type=None, id=None)
+    poll = models.ForeignKey(Poll, on_delete=models.CASCADE, related_name="choices")
     choice = JSONField(default=dict)
+    members = models.ManyToManyField('account.User', blank=True)
 
     def __str__(self):
         return self.poll.question
+
+    def is_voted_user(self, user):
+        try:
+            self.members.get(id=user.id)
+            return True
+        except:
+            return False
+    
+
         
 # class PollTextChoice(models.Model):
 #     poll = models.ForeignKey(Poll, on_delete=models.CASCADE, related_name="text_choices")
