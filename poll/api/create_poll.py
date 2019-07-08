@@ -15,7 +15,7 @@ from poll.models import *
 @csrf_exempt
 @get_user
 @require_http_methods(["POST"])
-def create_event_poll(request, user):
+def create_poll(request, user):
     data = json.loads(request.body)
     group_id = int(data.get("group_id"))
     place_ids = data.get("places")
@@ -30,7 +30,7 @@ def create_event_poll(request, user):
         return JsonResponse({"message": "user not authorized to create poll"}, status=403)
 
     poll = Poll.objects.create(question=poll_question, timeplan=timeplan)
-    
+
     for event_id in event_ids:
         event = Event.objects.filter(pk=int(event_id))
         if not event or len(event) > 1:
