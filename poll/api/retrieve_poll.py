@@ -4,6 +4,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 from account.api.get_user import get_user
 from account.models import Group
+from poll.models import Poll
 
 
 @csrf_exempt
@@ -34,6 +35,31 @@ def get_group_polls(request, user):
                          "polls": serialize_polls(polls)})
 
 
+@csrf_exempt
+@get_user
+@require_http_methods(["POST", "GET"])
+def get_poll(request, user):
+    data = json.loads(request.body)
+    poll_id = data.get("id")
+
+    group_id = data.get("group_id")
+    group = Group.objects.filter(pk=group_id).first()
+    poll = Poll.objects.filter(pk=poll_id).first()
+
+    if not poll:
+        return JsonResponse({"message": "Poll not found"}, status=404)
+
+    if (user not in group.members.all()) and (user.username != group.creator.username):
+        print("user", user.username)
+        print("creator", group.creator.username)
+        return JsonResponse({"message": "User not authorized to see this group's polls"}, status=401)
+
+    choices = [{"id": ch.pk, "name": ch.event.title, "count": ch.choice_count} for ch in poll.event_choices.all()]
+    return JsonResponse({"id": poll.pk,
+                         "question": poll.question,
+                         "choices": choices})
+
+
 def serialize_polls(polls_queryset):
     """Serializes polls to be representable and shippable. Gets specific groups polls queryset and returns a list
     of polls with representable attributes."""
@@ -43,8 +69,7 @@ def serialize_polls(polls_queryset):
         poll_dict = dict()
         poll_dict["id"] = poll.pk
         poll_dict["question"] = poll.question
-        choices = [{"id": ch.id, "text": ch.text, "vote_count": ch.choice_count} for ch in poll.choices.all()]
-        poll_dict["choices"] = choices
+        poll_dict["vote_count"] = poll.vote_count
         result.append(poll_dict)
 
     return result
