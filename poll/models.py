@@ -6,7 +6,8 @@ from django.db import models
 class Poll(models.Model):
     question = models.CharField(max_length=255)
     vote_count = models.IntegerField(default=0)
-    time_plan = models.ManyToManyField('TimePlan', blank=True)
+    time_plan = models.CharField(max_length=255)
+
     def __str__(self):
         return self.question
     
@@ -15,12 +16,14 @@ class Poll(models.Model):
             return True
         return False
 
+
 class TimePlan(models.Model):
     start = models.DateTimeField()
     end = models.DateTimeField()
 
     def __str__(self):
         return f"from: {self.start.strftime()} to:{self.start.strftime()}"
+
 
 class PollChoice(models.Model):
     # dictionary = dict(type=None, id=None)
