@@ -33,7 +33,7 @@ def create_group(request, creator):
     #                                             [member.username for member in members],
     #                                             unregistered_members)
 
-    group_id = create_group_in_db(creator, name, group_type, members)
+    group_id = create_group_in_db(creator, name, group_type, members, summary)
 
     return JsonResponse({"status": "Successfully created group.",
                          "group id": group_id,
