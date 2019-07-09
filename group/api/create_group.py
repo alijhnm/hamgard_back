@@ -44,7 +44,7 @@ def create_group(request, creator):
                          "type": group_type,
                          "summary": summary,
                          "Added members": [member.username for member in members],
-                         "Invited to Hamgard": unregistered_members})
+                         "Invited to Hamgard": unregistered_members}, status=200)
 
 
 def create_group_in_db(creator, name, type, members, summary):
