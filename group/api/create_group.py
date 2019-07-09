@@ -14,8 +14,8 @@ def create_group(request, creator):
     data = json.loads(request.body)
 
     name = data.get("name")
-    emails = data.get("emails")
-    group_type = data.get('type')
+    emails = [i for i in data.get("emails") if i]
+    group_type = data.get('type', 'private')
 
     members = User.objects.filter(email__in=emails)
     unregistered_members = emails
