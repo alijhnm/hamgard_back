@@ -16,7 +16,7 @@ def create_group(request, creator):
     name = data.get("name")
     emails = [i for i in data.get("emails") if i]
     group_type = data.get('type', 'private')
-
+    summary = data.get('summary')
     members = User.objects.filter(email__in=emails)
     unregistered_members = emails
     for user in members:
@@ -39,12 +39,13 @@ def create_group(request, creator):
                          "group id": group_id,
                          "name": name,
                          "type": group_type,
+                         "summary": summary,
                          "Added members": [member.username for member in members],
                          "Invited to Hamgard": unregistered_members})
 
 
-def create_group_in_db(creator, name, type, members):
-    group = Group(creator=creator, name=name, type=type)
+def create_group_in_db(creator, name, type, members, summary):
+    group = Group(creator=creator, name=name, type=type, summary=summary)
     group.save()
     for user in members:
         print(user.email)
