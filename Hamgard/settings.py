@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 
 import os
 from .local_settings import DATABASES_LOCAL, ALLOWED_HOSTS_LOCAL
+from corsheaders.defaults import default_headers
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -29,7 +31,14 @@ ALLOWED_HOSTS = [] + ALLOWED_HOSTS_LOCAL
 
 # define salt for password hashing
 SALT = "Tahlil9798"
+ALLOWED_HOSTS = ['*']
 
+
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_HEADERS = default_headers + (
+    'cache-control',
+    'customer-type'
+)
 # Application definition
 
 INSTALLED_APPS = [
@@ -48,6 +57,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
