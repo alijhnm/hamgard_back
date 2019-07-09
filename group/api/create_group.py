@@ -14,9 +14,12 @@ def create_group(request, creator):
     data = json.loads(request.body)
 
     name = data.get("name")
+    if not name:
+        return JsonResponse({"message": "name is mandatory"}, status=400)
     emails = [i for i in data.get("emails") if i]
     group_type = data.get('type', 'private')
     summary = data.get('summary')
+    print("suuuuummamam", summary)
     members = User.objects.filter(email__in=emails)
     unregistered_members = emails
     for user in members:
