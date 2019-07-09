@@ -14,8 +14,8 @@ def retrieve_poll_data(request, user):
     p = Place.objects.all()
     data = []
     for i in e:
-        data.append({"id": i.id, 'type': 'event'})
+        data.append({"key": len(data), "id": i.id, 'type': 'event'})
     for i in p:
-        data.append({"id": i.id, 'type': 'place'})
+        data.append({"key": len(data), "id": i.id, 'type': 'place'})
 
     return JsonResponse(data, safe=False, status=200)

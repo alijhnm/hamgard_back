@@ -62,4 +62,4 @@ def group_detail(request, user):
                          "is_creator": group.creator.username == user,
                          "creator": group.creator.username,
                          "polls": serialize_polls(polls),
-                         "members": [member.username for member in group.members.all()]}, status=200)
+                         "members": [{"key": str(i), "username": member.username} for i, member in enumerate(group.members.all())]}, status=200)

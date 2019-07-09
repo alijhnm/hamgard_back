@@ -101,8 +101,9 @@ def serialize_polls(polls_queryset):
     of polls with representable attributes."""
 
     result = list()
-    for poll in polls_queryset:
+    for i, poll in enumerate(polls_queryset):
         poll_dict = dict()
+        poll_dict["key"] = str(i)
         poll_dict["id"] = poll.pk
         poll_dict["question"] = poll.question
         poll_dict["vote_count"] = poll.vote_count
