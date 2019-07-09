@@ -5,8 +5,8 @@ from django.db import models
 
 class Poll(models.Model):
     question = models.CharField(max_length=255)
-    vote_count = models.IntegerField(default=0)
-    time_plan = models.CharField(max_length=255)
+    # vote_count = models.IntegerField(default=0)
+    time_plan = models.CharField(max_length=255, default=None, blank=True, null=True)
 
     def __str__(self):
         return self.question
@@ -16,6 +16,14 @@ class Poll(models.Model):
             return True
         return False
 
+    @property
+    def vote_count(self):
+        choices = self.choices.all()
+        members = []
+        for i in choices:
+            members.append(list(i.members.all().values_list('id', flat=True)))
+        members = list(set(members))
+        return len(members)
 
 class TimePlan(models.Model):
     start = models.DateTimeField()

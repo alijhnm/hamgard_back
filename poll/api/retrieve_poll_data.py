@@ -27,4 +27,4 @@ def retrieve_poll_data(request, user):
     for i in p:
         data.append({"id": i.id, 'type': 'place'})
 
-    return JsonResponse(data, safe=False, status=201)
+    return JsonResponse(data, safe=False, status=200)
