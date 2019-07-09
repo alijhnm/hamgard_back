@@ -5,7 +5,7 @@ from .customer_signup import sign_up as customer_signup
 
 
 urlpatterns = [
-    path('customerlogin/', customer_login),
-    path('customerlogout/', customer_logout),
-    path('customersignup/', customer_signup),
+    path('customer_login/', customer_login),
+    path('customer_logout/', customer_logout),
+    path('customer_signup/', customer_signup),
 ]
