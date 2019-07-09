@@ -1,6 +1,5 @@
 import json
 
-from django.core.exceptions import MultipleObjectsReturned, ObjectDoesNotExist
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
@@ -18,10 +17,11 @@ from poll.models import *
 def create_poll(request, user):
     data = json.loads(request.body)
     group_id = int(data.get("group_id"))
-    place_ids = data.get("places")
+    place_ids = list(map(int, data.get("places")))
     event_ids = list(map(int, data.get("events")))
-    timeplan = data.get("timeplan")
+    time_plan = data.get("time_plan")
     poll_question = data.get("question")
+
     group = get_object_or_404(Group, pk=group_id)
 
     if not group.creator.username == user.username:
@@ -29,7 +29,7 @@ def create_poll(request, user):
         print("creator", group.creator.username)
         return JsonResponse({"message": "user not authorized to create poll"}, status=403)
 
-    poll = Poll.objects.create(question=poll_question, timeplan=timeplan)
+    poll = Poll.objects.create(question=poll_question, time_plan=time_plan)
 
     for event_id in event_ids:
         event = Event.objects.filter(pk=int(event_id))
