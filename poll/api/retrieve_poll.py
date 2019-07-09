@@ -4,6 +4,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 from account.api.get_user import get_user
 from account.models import Group
+from event.models import Event, Place
 from poll.models import Poll
 
 
@@ -41,11 +42,13 @@ def get_group_polls(request, user):
 def get_poll(request, user):
     data = json.loads(request.body)
     poll_id = data.get("id")
-
     group_id = data.get("group_id")
-    group = Group.objects.filter(pk=group_id).first()
-    poll = Poll.objects.filter(pk=poll_id).first()
 
+    group = Group.objects.filter(pk=group_id).first()
+    if not group:
+        return JsonResponse({"message": "Group not found"}, status=404)
+
+    poll = Poll.objects.filter(pk=poll_id).first()
     if not poll:
         return JsonResponse({"message": "Poll not found"}, status=404)
 
@@ -54,9 +57,38 @@ def get_poll(request, user):
         print("creator", group.creator.username)
         return JsonResponse({"message": "User not authorized to see this group's polls"}, status=401)
 
-    choices = [{"id": ch.pk, "name": ch.event.title, "count": ch.choice_count} for ch in poll.event_choices.all()]
+    choices = list()
+    for choice in poll.choices.all():
+        data = dict()
+        if choice.choice.get("type") == "event":
+            try:
+                event = Event.objects.get(pk=choice.choice.get("id"))
+            except:
+                continue
+
+            data["type"] = "event"
+            data["title"] = event.title
+            data["tags"] = [tag.name for tag in event.tags.all()]
+            data["discount"] = event.discount
+            data["price"] = event.price
+            data["summary"] = event.summary
+            choices.append(data)
+
+        elif choice.choice.get("type") == "place":
+            try:
+                place = Place.objects.get(pk=choice.choice.get("id"))
+            except:
+                continue
+
+            data["type"] = "place"
+            data["name"] = place.name_en
+            data["city"] = place.city.name
+            data["province"] = place.city.province.name
+            choices.append(data)
+
     return JsonResponse({"id": poll.pk,
                          "question": poll.question,
+                         "vote_count": poll.vote_count,
                          "choices": choices})
 
 

@@ -20,10 +20,12 @@ class Poll(models.Model):
     def vote_count(self):
         choices = self.choices.all()
         members = []
-        for i in choices:
-            members.append(list(i.members.all().values_list('id', flat=True)))
-        members = list(set(members))
+        for choice in choices:
+            for user in choice.members.all():
+                if user not in members:
+                    members.append(user)
         return len(members)
+
 
 class TimePlan(models.Model):
     start = models.DateTimeField()
