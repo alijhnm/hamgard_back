@@ -10,9 +10,8 @@ from account.api.get_user import get_user
 from account.models import *
 
 
-# @csrf_exempt
-# @get_user
-# @require_http_methods(['GET'])
+@csrf_exempt
+@require_http_methods(['GET'])
 def group_users(request, group_id):
     group = get_object_or_404(Group, id=group_id)
     group_members = group.members.all()
