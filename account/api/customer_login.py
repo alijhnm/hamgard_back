@@ -19,18 +19,14 @@ def log_in(request):
     data = json.loads(request.body)
     username = data.get('username')
     password = data.get('password')
-    remember_me = data.get("remember_me", False)
+    p = data.get("remember_me", False)
 
     if username is None or password is None:
         return JsonResponse({"message": "invalid params give"}, status=400)
     user = authenticate(username=username, password=password, salt=SALT)
     if not user:
-        return JsonResponse({"message": "incorrect username or password"}, status=404)
-    if not remember_me:
-        p = False
-    else:
-        p = True
-
+        return JsonResponse({"message": "incorrect username or password"}, status=400)
+        
     if user.token is not None:
         return JsonResponse({"token": "token " + user.token})
 
