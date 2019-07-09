@@ -19,6 +19,6 @@ def group_users(request, group_id):
     data = dict(id=group.id, name=group.name, admin={'id': group.creator.id,
                                                      'name': group.creator.username,
                                                      'email': group.creator.email},
-                members=[{"name": x.user.username, "id":x.user.id,
-                          "email": x.user.email} for x in group_members])
+                members=[{"name": x.username, "id":x.id,
+                          "email": x.email} for x in group_members])
     return JsonResponse(data, safe=False, status=200)
