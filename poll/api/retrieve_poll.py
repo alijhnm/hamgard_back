@@ -67,11 +67,13 @@ def get_poll(request, user):
                 continue
 
             data["type"] = "event"
+            data["id"] = event.pk
             data["title"] = event.title
             data["tags"] = [tag.name for tag in event.tags.all()]
             data["discount"] = event.discount
             data["price"] = event.price
             data["summary"] = event.summary
+            data["vote_count"] = len(choice.members.all())
             choices.append(data)
 
         elif choice.choice.get("type") == "place":
@@ -80,10 +82,12 @@ def get_poll(request, user):
             except:
                 continue
 
+            data["id"] = place.pk
             data["type"] = "place"
             data["name"] = place.name_en
             data["city"] = place.city.name
             data["province"] = place.city.province.name
+            data["vote_count"] = len(choice.members.all())
             choices.append(data)
 
     return JsonResponse({"id": poll.pk,
