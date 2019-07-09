@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     'group',
     'event',
     "poll",
-    "place"
+    "place",
+    "checkout"
 ]
 
 MIDDLEWARE = [
