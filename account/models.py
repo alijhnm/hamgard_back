@@ -81,7 +81,7 @@ class Group(models.Model):
     type = models.CharField(max_length=200, null=True, blank=True)
     name = models.CharField(null=True, blank=True, max_length=200)
     polls = models.ManyToManyField('poll.Poll', blank=True)
-
+    summary = models.TextField(null=True, blank=True)
 
 class SuperGroup(models.Model):
     creator = models.ForeignKey(User, on_delete=models.CASCADE)
