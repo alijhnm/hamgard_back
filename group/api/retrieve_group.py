@@ -5,6 +5,8 @@ from django.views.decorators.http import require_http_methods
 from account.models import *
 from account.api.get_user import get_user
 from django.db.models import Q
+from poll.api.retrieve_poll import serialize_polls
+
 
 def serialize_group_queryset(queryset, user=None):
     result = list()
@@ -26,6 +28,7 @@ def serialize_group_queryset(queryset, user=None):
         serialized['is_admin'] = True if user == group.creator else False
         result.append(serialized)
     return result
+
 
 @csrf_exempt
 @get_user
@@ -50,13 +53,13 @@ def group_detail(request, user):
     if user not in group.members.all() and group.creator.username != user.username:
         return JsonResponse({"message": "user not in requested group."}, status=401)
 
+    polls = group.polls.all()
+
     return JsonResponse({"name": group.name,
                          "id": group.pk,
                          "created": group.created,
                          "type": group.type,
                          "is_creator": group.creator.username == user,
                          "creator": group.creator.username,
+                         "polls": serialize_polls(polls),
                          "members": [member.username for member in group.members.all()]}, status=200)
-
-
-
