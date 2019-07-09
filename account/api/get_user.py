@@ -8,7 +8,8 @@ def get_user(func):
     def inner(request, *args, **kwargs):
         head = request.META
         try:
-            token = head.get('HTTP_TOKEN').split()[1]
+            token = head.get('HTTP_AUTHORIZATION').split()[1]
+            print("messss")
         except AttributeError:
             return JsonResponse({"message": "token not provided in header."}, status=400)
 
