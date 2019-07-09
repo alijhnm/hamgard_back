@@ -22,7 +22,7 @@ def vote_in_poll(request, user):
     choice_ids = list(map(int, data.get("choices")))
     group = get_object_or_404(Group, pk=group_id)
     try:
-        if user not in group.members.all():
+        if (user not in group.members.all()) and group.creator.username != user.username:
             raise Exception
         poll = group.polls.get(id=int(poll_id))
     except ObjectDoesNotExist:
@@ -34,8 +34,8 @@ def vote_in_poll(request, user):
 
     for c in choices:
         if not c.is_voted_user(user):
-            x.members.add(user)
+            c.members.add(user)
         else:
-            x.members.remove(user)
+            c.members.remove(user)
 
     return JsonResponse({"message": "Successfully voted!"}, status=200)
