@@ -4,8 +4,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
-from account.api.get_user import get_user
-from event.models import Event
+from event.models import Event, Place
 
 
 @csrf_exempt

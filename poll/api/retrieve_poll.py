@@ -96,6 +96,68 @@ def get_poll(request, user):
                          "choices": choices})
 
 
+@csrf_exempt
+@get_user
+@require_http_methods(["POST", "GET"])
+def get_poll2(request, user):
+    data = json.loads(request.body)
+    poll_id = data.get("id")
+    group_id = data.get("group_id")
+
+    group = Group.objects.filter(pk=group_id).first()
+    if not group:
+        return JsonResponse({"message": "Group not found"}, status=404)
+
+    poll = Poll.objects.filter(pk=poll_id).first()
+    if not poll:
+        return JsonResponse({"message": "Poll not found"}, status=404)
+
+    if (user not in group.members.all()) and (user.username != group.creator.username):
+        print("user", user.username)
+        print("creator", group.creator.username)
+        return JsonResponse({"message": "User not authorized to see this group's polls"}, status=401)
+
+    choices = list()
+    for choice in poll.choices.all():
+        data = dict()
+        if choice.choice.get("type") == "event":
+            try:
+                event = Event.objects.get(pk=choice.choice.get("id"))
+            except:
+                continue
+
+            data["type"] = "event"
+            data["id"] = event.pk
+            data["title"] = event.title
+            try:
+                data["category"] = event.category.title
+            except:
+                data["category"] = ""
+            data["vote_count"] = len(choice.members.all())
+            choices.append(data)
+
+        elif choice.choice.get("type") == "place":
+            try:
+                place = Place.objects.get(pk=choice.choice.get("id"))
+            except:
+                continue
+
+            data["id"] = place.pk
+            data["type"] = "place"
+            data["name"] = place.name_en
+            try:
+                data["category"] = place.category.name_en
+            except:
+                data["category"] = ""
+            data["vote_count"] = len(choice.members.all())
+            choices.append(data)
+
+    return JsonResponse({"id": poll.pk,
+                         "question": poll.question,
+                         "vote_count": poll.vote_count,
+                         "choices": choices})
+
+
 def serialize_polls(polls_queryset):
     """Serializes polls to be representable and shippable. Gets specific groups polls queryset and returns a list
     of polls with representable attributes."""
