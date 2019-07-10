@@ -29,4 +29,6 @@ def serialize_place(place):
     serialized["city"] = place.city.name
     serialized["tags"] = [tag.name for tag in place.tags.all()]
     serialized["category"] = place.category.name_en
+    images = place.images.all()
+    serialized["images"] = [x.image.url for x in images] if images else ['/media/alt_image.jpeg']
     return serialized

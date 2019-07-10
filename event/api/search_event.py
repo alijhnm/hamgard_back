@@ -36,5 +36,7 @@ def serialize_event(queryset):
         serialized["price"] = event.price
         serialized["discount"] = event.discount
         serialized["address"] = event.address.address_text
+        images = event.images.all()
+        serialized["images"] = [x.image.url for x in images] if images else ['/media/alt_image.jpeg']
         data.append(serialized)
     return data

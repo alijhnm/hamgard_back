@@ -25,7 +25,7 @@ class Event(models.Model):
 
 class EventImage(models.Model):
     Event = models.ForeignKey(Event, related_name="images", on_delete=models.CASCADE)
-    image = models.ImageField()
+    image = models.ImageField(upload_to="event_images")
     alt = models.CharField(max_length=100)
 
     def __str__(self):
@@ -85,12 +85,22 @@ class Tag(models.Model):
 
 
 class Place(models.Model):
-    name_fa = models.CharField(max_length=500)
+    name_fa = models.CharField(max_length=500, null=True, blank=True)
     name_en = models.CharField(max_length=500, null=True, blank=True)
     city = models.ForeignKey(City, on_delete=models.CASCADE)
     tags = models.ManyToManyField('Tag', blank=True)
     address = models.ForeignKey(Address, on_delete=models.CASCADE)
-    category = models.ForeignKey(PlaceCategory, on_delete=models.CASCADE)
+    category = models.ForeignKey(PlaceCategory, on_delete=models.CASCADE, null=True, blank=True)
+    # image = models.ImageField(null=True, blank=True)
 
     def __str__(self):
-        return self.name_fa
+        return "id:{}, name:{}".format(self.id, self.name_en)
+
+
+class PlaceImage(models.Model):
+    place = models.ForeignKey(Place, related_name="images", on_delete=models.CASCADE)
+    image = models.ImageField(upload_to="place_images")
+    alt = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.alt

@@ -29,6 +29,7 @@ def event_detail(request):
 
 
 def serialize_event(event):
+    images = event.images.all()
     serialized = dict()
     serialized["id"] = event.id
     serialized["vendor"] = event.vendor.user.username
@@ -38,4 +39,5 @@ def serialize_event(event):
     serialized["price"] = event.price
     serialized["discount"] = event.discount
     serialized["address"] = event.address.address_text
+    serialized["images"] = [x.image.url for x in images] if images else ['/media/alt_image.jpeg']
     return serialized

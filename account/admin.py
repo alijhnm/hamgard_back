@@ -6,3 +6,5 @@ from account.models import *
 
 admin.site.register(User)
 admin.site.register(Group)
+admin.site.register(Profile)
+# admin.site.register(Vendor)
