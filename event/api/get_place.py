@@ -10,9 +10,8 @@ from event.api.retrieve_event import serialize_event
 
 
 @csrf_exempt
-@get_user
 @require_http_methods(["GET"])
-def get_places(request, user):
+def get_places(request):
     places = Place.objects.all()
     data = serialize_places(places)
     return JsonResponse(data, safe=False, status=200)

@@ -5,7 +5,7 @@ class EventCategory(models.Model):
     title = models.CharField(max_length=200)
 
     def __str__(self):
-        return self.pk
+        return self.title
 
 
 class Event(models.Model):
@@ -18,6 +18,7 @@ class Event(models.Model):
     price = models.FloatField()
     tags = models.ManyToManyField('Tag', blank=True)
 
+
     def __str__(self):
         return self.title
 
@@ -28,7 +29,7 @@ class EventImage(models.Model):
     alt = models.CharField(max_length=100)
 
     def __str__(self):
-        return self.pk
+        return self.alt
 
 
 class EventVideo(models.Model):
@@ -37,7 +38,7 @@ class EventVideo(models.Model):
     alt = models.CharField(max_length=100)
 
     def __str__(self):
-        return self.pk
+        return str(self.pk)
 
 
 class Province(models.Model):
@@ -65,7 +66,7 @@ class Address(models.Model):
     address_text = models.CharField(max_length=500, null=True, blank=True)
 
     def __str__(self):
-        return self.pk
+        return str(self.pk)
 
 
 class PlaceCategory(models.Model):
