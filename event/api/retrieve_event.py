@@ -7,7 +7,6 @@ from event.models import Event
 
 
 @csrf_exempt
-@get_vendor
 @require_http_methods(["GET"])
 def events_list(request, vendor):
     events = Event.objects.filter(vendor=vendor)
@@ -15,9 +14,8 @@ def events_list(request, vendor):
 
 
 @csrf_exempt
-@get_vendor
 @require_http_methods(["GET"])
-def event_detail(request, vendor):
+def event_detail(request):
     data = json.loads(request.body)
     event_id = data.get("event_id")
     event = Event.objects.filter(id=event_id).first()

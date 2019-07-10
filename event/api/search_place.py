@@ -15,10 +15,10 @@ from django.db.models import Q
 #     return JsonResponse({"events": [serialize_event(event) for event in events]})
 
 
+# @get_user
 @csrf_exempt
-@get_user
 @require_http_methods(["GET"])
-def search_place(request, vendor):
+def search_place(request):
     q = request.GET.get("q")
     places = Place.objects.filter(Q(name_fa__icontains= q) | Q(name_en__icontains= q))
     if not places:

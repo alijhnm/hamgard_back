@@ -16,9 +16,8 @@ from django.db.models import Q
 
 
 @csrf_exempt
-@get_user
 @require_http_methods(["GET"])
-def search_event(request, vendor):
+def search_event(request):
     q = request.GET.get("q")
     event = Event.objects.filter(Q(title__icontains= q))
     if not event:
