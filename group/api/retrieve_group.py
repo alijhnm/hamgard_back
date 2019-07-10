@@ -54,12 +54,12 @@ def group_detail(request, user):
         return JsonResponse({"message": "user not in requested group."}, status=401)
 
     polls = group.polls.all()
-
+    print(group.creator.username == user.username)
     return JsonResponse({"name": group.name,
                          "id": group.pk,
                          "created": group.created,
                          "type": group.type,
-                         "is_creator": group.creator.username == user,
+                         "is_creator": group.creator.username == user.username,
                          "creator": group.creator.username,
                          "polls": serialize_polls(polls),
                          "members": [{"key": str(i), "username": member.username} for i, member in enumerate(group.members.all())]}, status=200)
